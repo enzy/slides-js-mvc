@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MVC: JavaScript server/klient</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+    <style type="text/css">
+      html, body {font-size: 22px; font-family: 'Segoe UI Light', 'Segoe UI', Segoe,Arial,Verdana,sans-serif; }
+      pre { font-size: 16px; }
+      pre>code { background: none !important; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: middle
+
+---
+
+class: center
+
+# MVC & webové aplikace<br><br>*JavaScript server/klient*
+
+<br>
+[matejsimek.cz](http://www.matejsimek.cz) | [@matejsimek](https://twitter.com/matejsimek)
+
+<small class="muted">8.4.2014</small>
+
+
+---
+
+
+class: center
+
+# Letem světem co nás čeká
+
+
+
+---
+
+
+
+## A) Server
+
+- runtime Node.js
+- databáze MongoDB
+- templates: Handlebars
+- frameworks: Express, Sails.js
+
+
+
+---
+
+
+
+## B) Klient
+
+- single-page app
+- templates: Handlebars
+- frameworks: Backbone.js, Ember.js
+
+
+---
+
+
+
+## Kam co patří
+
+<table class="table">
+  <tr>
+    <td></td>
+    <th>Model</th>
+    <th>View</th>
+    <th>Controller</th>
+  </tr>
+  <tr>
+    <th>Server</th>
+    <td>Mongo</td>
+    <td>Mustache</td>
+    <td>Express, Sails</td>
+  </tr>
+  <tr>
+    <th>Klient</th>
+    <td>API</td>
+    <td>Mustache</td>
+    <td>Backbone, Ember</td>
+  </tr>
+</table>
+
+
+
+---
+
+
+
+class: center
+
+# Technologie na serveru
+
+
+
+---
+
+
+background-image: url(http://nodejs.org/images/logos/nodejs-2560x1440.png)
+
+---
+
+
+
+# Node.js <small class="pull-right">[nodejs.org](http://nodejs.org)</small>
+<small>Např. PayPal, Wallmart, ...</small>
+
+- open-source platforma
+- JavaScriptový engine [V8](https://code.google.com/p/v8) <small>(Google Chrome)</small>
+- event-driven, non-blocking I/O model
+
+
+---
+
+
+## Popularita (GitHub)
+
+<table class="table">
+  <tr>
+    <td></td>
+    <th>Stars</th>
+    <th>Forks</th>
+    <th>Contributors</th>
+  </tr>
+  <tr>
+    <td>Node.js</td>
+    <td>29k</td>
+    <td>6k</td>
+    <td>502</td>
+  </tr>
+  <tr>
+    <td>jQuery</td>
+    <td>30k</td>
+    <td>6.7k</td>
+    <td>200</td>
+  </tr>
+  <tr>
+    <td>Ruby</td>
+    <td>5.2k</td>
+    <td>1.5k</td>
+    <td>34</td>
+  </tr>
+</table>
+
+
+
+---
+
+
+
+## Modules
+
+- implementace [CommonJS Modules/1.0](http://wiki.commonjs.org/wiki/Modules/1.0)
+- řešení interních/externích závislotí
+
+### Core moduly
+
+<small>Assertion Testing, Buffer, C/C++ Addons, Child Processes, Cluster, Console, Crypto, Debugger, DNS, Domain, Events, File System, Globals, HTTP, HTTPS, Modules, Net, OS, Path, Process, Punycode, Query Strings, Readline, REPL, Stream, String Decoder, Timers, TLS/SSL, TTY, UDP/Datagram, URL, Utilities, VM, ZLIB</small>
+
+### Použití
+
+circle.js
+```js
+exports.area = function (r) {
+  return Math.PI * r * r
+}
+```
+
+index.js
+```js
+var circle = require('./circle.js');
+console.log('The area of a circle of radius 4 is ' + circle.area(4));
+```
+
+
+
+---
+
+
+
+### NPM - Node Packaged Modules <small class="pull-right">[npmjs.org](https://www.npmjs.org)</small>
+
+- monstrózní kolekce komunitních modulů (68k+)
+- `package.json` - soubor s definicemi závislotí
+- `npm install express` - příkaz instalace modulu
+- `require('express')` - použití modulu
+
+
+<table class="table">
+  <tr>
+    <td>
+      <strong>Most Starred</strong>
+      <ul>
+        <li><strong>express</strong></li>
+        <li>async</li>
+        <li>request</li>
+        <li>grunt</li>
+        <li>socket.io</li>
+        <li>mocha</li>
+        <li>lodash</li>
+        <li>underscore</li>
+        <li>jade</li>
+        <li><strong>mongoose</strong></li>
+      </ul>
+    </td>
+    <td>
+      <strong>Most Depended Upon</strong>
+      <ul>
+        <li>underscore</li>
+        <li>async</li>
+        <li>request</li>
+        <li>commander</li>
+        <li><strong>express</strong></li>
+        <li>lodash</li>
+        <li>optimist</li>
+        <li>coffee-script</li>
+        <li>colors</li>
+        <li>mkdirp</li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+
+---
+
+
+
+# MongoDB <small class="pull-right">[mongodb.org](https://www.mongodb.org)</small>
+- open-source dokumentová databáze (NoSQL)
+- dynamické schéma
+- dokumenty v JSON podobě:
+
+```json
+{
+  "name": "sue",
+  "age": 26,
+  "status": "A",
+  "groups": ["news", "sports"]
+}
+```
+
+- Dále: Full Index Support, Replication & High Availability, Auto-Sharding, Querying, Fast In-Place Updates, Map/Reduce, GridFS, MongoDB Management Service, Professional Support by MongoDB
+
+<img src="http://info.mongodb.com/rs/mongodb/images/MongoDB_Logo_Full.png" alt="" class="pull-right">
+
+---
+
+
+## Mongoose
+
+- definice a práce s modelem
+
+```js
+// Připojení k DB
+var mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/test')
+
+// Definice
+var Cat = mongoose.model('Cat', { name: String })
+
+// Instance
+var kitty = new Cat({ name: 'Zildjian' })
+
+// Persistence
+kitty.save(callback)
+
+// Query
+Cat.find({name: 'Micinka'}, callback)
+```
+
+
+---
+
+
+
+# Handlebars.js <small class="pull-right">[handlebarsjs.com](http://handlebarsjs.com)</small>
+- logic-less template engine
+- vychází z [Mustache](http://mustache.github.io/), které je dostupné pro většinu platforem
+
+Výpis
+```xml
+<div class="entry">
+  <h1>{{title}}</h1>
+  <p>By {{author.name}}</p>
+  <div class="body">
+    {{body}}
+  </div>
+</div>
+```
+
+Podmínky
+```xml
+{{#if isActive}}
+  <img src="star.gif" alt="Active">
+{{else}}
+  <img src="cry.gif" alt="Inactive">
+{{/if}}
+```
+
+Partials: `{{> partialName}}`
+
+---
+
+Helpery
+```xml
+<div class="post">
+  <h1>By {{fullName author}}</h1>
+</div>
+```
+
+Blokové helpery
+```xml
+<div class="entry">
+  <h1>{{title}}</h1>
+  {{#with story}}
+    <div class="intro">{{{intro}}}</div>
+    <div class="body">{{{body}}}</div>
+  {{/with}}
+</div>
+<div class="comments">
+  {{#each comments}}
+    <div class="comment">
+      <h2>{{subject}}</h2>
+      {{{body}}}
+    </div>
+  {{/each}}
+</div>
+```
+
+---
+
+
+
+# Express <small class="pull-right">[expressjs.com](http://expressjs.com)</small>
+- web application framework
+
+
+- HTTP/S server s middlewares
+- Application / Request / Response / Middleware (a life-cycle požadavku)
+
+```js
+var express = require('express');
+var app = express();
+
+app.get('/hello.txt', function(req, res){
+  res.send('Hello World');
+});
+
+var server = app.listen(3000, function() {
+    console.log('Listening on port %d', server.address().port);
+});
+```
+
+<img width="300" src="https://camo.githubusercontent.com/40504dd28b050be0e43c6ef1e2735b2caf147dd4/687474703a2f2f662e636c2e6c792f6974656d732f30563253316e304b3169337931633132326730342f53637265656e25323053686f74253230323031322d30342d31312532306174253230392e35392e3432253230414d2e706e67" alt="" class="pull-right">
+
+---
+
+class: center
+
+# MVC?
+
+---
+
+class: center
+
+# puzzle time!
+
+---
+
+## Struktura
+
+```
+app
+  controllers
+  models
+  views
+config
+  routes.js
+public
+```
+
+\+ demíčko `git@github.com:enzy/express-skeleton.git`
+
+
+---
+
+background-image: url(http://sailsjs.org/images/image_squidhome.png)
+
+---
+
+# Sails.js <small class="pull-right">[sailsjs.org](http://sailsjs.org)</small>
+
+
+- Plnohodnotný webový framework
+- Declarative (minimalizuje boilerplate kód)
+- Automatické RESTful routes
+- Generátor M+C
+
+<br>
+
+```
+sails new testProject
+cd testProject
+sails generate user
+sails lift
+```
+
+<br>
+
+<img src="http://sailsjs.org/images/sails-logo.jpg" alt="" class="pull-right">
+
+
+---
+
+
+
+class: center
+
+# Technologie na klientu
+
+
+
+---
+
+# Single-page aplikace
+
+*těžký klient*
+
+- většina aplikace běží na jedné stránce, navigace pomocí [History API](http://diveintohtml5.info/history.html)
+- dnes nutné pro většinu webových aplikací s pokročilými uživatelskými interakcemi
+- přechod z ukládání dat v DOMu do vlastních struktur v JavaScriptu
+
+---
+
+# Backbone.js <small class="pull-right">[backbonejs.org](http://backbonejs.org)</small>
+<small>Např. Rdio, Hulu, Foursquare, Bitbucket, Disqus, Walmart Mobile, Groupon Now!, Basecamp, Airbnb, Trello</small>
+
+- framework pomáhající strukturovat kód ve stylu MVC
+- velmi minimalistický ale tím naopak flexibilní v možnostech použití
+- synchronizace modelů se serverem přes RESTful JSON API
+
+
+## Stavební bloky
+- Backbone.Model
+- Backbone.Router
+- Backbone.View
+
+<img width="300" src="http://backbonejs.org/docs/images/backbone.png" alt="" class="pull-right">
+
+\+ Events, Collections, History, Sync
+
+---
+
+class: center
+
+# Live coding!
+
+---
+
+
+# Ember.js <small class="pull-right">[emberjs.com](http://emberjs.com)</small>
+
+<small>Např. Zendesk, Discurse, Groupon, Yahoo</small>
+
+<img src="http://www.gravatar.com/avatar/0cf15665a9146ba852bf042b0652780a?s=200" class="pull-right">
+
+Plnohodnotný webový framework
+
+
+## Přednosti
+
+- standard application architecture
+- eliminates boilerplate
+- auto-updating templates
+- custom components
+
+
+---
+
+class: center
+
+# Děkuji za pozornost :)
+
+<br>
+
+Ozvěte se mi: [matejsimek.cz](http://www.matejsimek.cz) | [@matejsimek](https://twitter.com/matejsimek)
+
+<br>
+
+## Odkazy pro další studium
+
+http://todomvc.com/ - srovnání JS MVC frameworků
+
+http://superherojs.com/ - tipy jak se vypořádat psaním JS
+
+
+
+
+
+    </textarea>
+    <script src="remark-0.6.3.min.js"></script>
+
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightStyle: 'tomorrow'
+      });
+    </script>
+  </body>
+</html>
